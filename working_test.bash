@@ -29,7 +29,16 @@ export TRANS_SERVER_URL=http://localhost:8080
 dd if=/dev/urandom of=10MB.file bs=1024 count=10240
 
 # Send 10MB.file
-./trans send 10MB.file
+FILE_ID=`./trans send 10MB.file`
+
+# Get file by wget
+wget $TRANS_SERVER_URL/$FILE_ID
+
+# Diff
+diff 10MB.file $FILE_ID
+
+# Remove downloaded file
+rm $FILE_ID
 
 # Remove 10MB.file
 rm 10MB.file

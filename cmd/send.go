@@ -60,7 +60,7 @@ var addCmd = &cobra.Command{
 		resp, err := http.Post(serverUrl.String(), "application/octet-stream", file)
 		fileIdBytes, _ := ioutil.ReadAll(resp.Body)
 		fileId := strings.TrimRight(string(fileIdBytes), "\n")
-		println(fileId)
+		fmt.Println(fileId)
 
 	},
 }
