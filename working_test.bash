@@ -22,6 +22,10 @@ TRANS_CONT_ID=`docker run -d -p 8080:80 $TRANS_IMAGE`
 dep ensure
 go build -o trans
 
+# Show version
+./trans version
+./trans --version
+
 # Server URL setting
 export TRANS_SERVER_URL=http://localhost:8080
 

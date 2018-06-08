@@ -1,16 +1,18 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
-
 	"github.com/spf13/cobra"
+	"fmt"
+
+	"github.com/nwtgck/trans-cli-go/version"
 )
 
 var RootCmd = &cobra.Command{
 	Use:   os.Args[0],
 	Short: "Trans CLI",
 	Long:  "Trans CLI",
+	Version: version.Version,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -26,6 +28,6 @@ var versionCmd = &cobra.Command{
 	Short: "Show version",
 	Long:  `Show version`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("DUMMY VERSION") // TODO: Show version
+		fmt.Println(version.Version)
 	},
 }
