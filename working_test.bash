@@ -31,8 +31,8 @@ dd if=/dev/urandom of=10MB.file bs=1024 count=10240
 # Send 10MB.file
 FILE_ID=`./trans send 10MB.file`
 
-# Get file by wget
-wget $TRANS_SERVER_URL/$FILE_ID
+# Get the file
+./trans get $FILE_ID
 
 # Diff
 diff 10MB.file $FILE_ID
