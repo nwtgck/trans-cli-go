@@ -12,10 +12,10 @@ import (
 )
 
 func init() {
-	RootCmd.AddCommand(addCmd)
+	RootCmd.AddCommand(sendCmd)
 }
 
-var addCmd = &cobra.Command{
+var sendCmd = &cobra.Command{
 	Use:   "send",
 	Short: "Send a file",
 	Long:  "Send a file",
