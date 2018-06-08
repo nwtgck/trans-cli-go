@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - "1.9"
+
+services:
+  - docker
+
+before_install:
+  # Install dep
+  # (from: https://github.com/travis-ci/travis-ci/issues/8301#issuecomment-384963911)
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+
+script:
+  # Just working-test
+  - ./working_test.bash
+
+cache:
+  - apt
