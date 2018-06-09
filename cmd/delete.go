@@ -10,7 +10,7 @@ import (
 
   "github.com/spf13/cobra"
   "github.com/spf13/viper"
-  "github.com/nwtgck/trans-cli-go/constants"
+  "github.com/nwtgck/trans-cli-go/settings"
 )
 
 
@@ -30,13 +30,13 @@ var deleteCmd = &cobra.Command{
     // TODO: Extract command parts (Almost part is the same as get command)
 
     // If server URL is not set
-    if !viper.IsSet(constants.ServerUrlKey) {
+    if !viper.IsSet(settings.ServerUrlKey) {
       fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
       os.Exit(1)
     }
 
     // Get server URL
-    serverUrlStr := viper.GetString(constants.ServerUrlKey)
+    serverUrlStr := viper.GetString(settings.ServerUrlKey)
 
     // Check validity of server URL
     serverUrl, err := url.Parse(serverUrlStr)

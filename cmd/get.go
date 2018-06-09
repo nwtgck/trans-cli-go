@@ -11,7 +11,7 @@ import (
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
   "github.com/spf13/viper"
-  "github.com/nwtgck/trans-cli-go/constants"
+  "github.com/nwtgck/trans-cli-go/settings"
 )
 
 
@@ -34,13 +34,13 @@ var getCmd = &cobra.Command{
     // TODO: Extract command parts
 
     // If server URL is not set
-    if !viper.IsSet(constants.ServerUrlKey) {
+    if !viper.IsSet(settings.ServerUrlKey) {
       fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
       os.Exit(1)
     }
 
     // Get server URL
-    serverUrlStr := viper.GetString(constants.ServerUrlKey)
+    serverUrlStr := viper.GetString(settings.ServerUrlKey)
 
     // Check validity of server URL
     serverUrl, err := url.Parse(serverUrlStr)

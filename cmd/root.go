@@ -9,7 +9,7 @@ import (
 
   "github.com/nwtgck/trans-cli-go/version"
   "github.com/spf13/viper"
-  "github.com/nwtgck/trans-cli-go/constants"
+  "github.com/nwtgck/trans-cli-go/settings"
 )
 
 // Server URL string
@@ -33,11 +33,11 @@ func initConfig(){
   // Add config path
   viper.AddConfigPath(ConfigDirPath)
   // Set config file name
-  viper.SetConfigName(constants.ConfigName)
+  viper.SetConfigName(settings.ConfigName)
   // Set config type
-  viper.SetConfigType(constants.ConfigExt)
+  viper.SetConfigType(settings.ConfigExt)
   // Set default server url
-  viper.SetDefault(constants.ServerUrlKey, constants.DefaultServerUrl)
+  viper.SetDefault(settings.ServerUrlKey, settings.DefaultServerUrl)
 
   if _, err := os.Stat(ConfigDirPath); os.IsNotExist(err) {
     // Make nested directories for config
@@ -45,14 +45,14 @@ func initConfig(){
   }
 
   // Path of config file
-  defaultConfigFilePath := path.Join(ConfigDirPath, fmt.Sprintf("%s.%s", constants.ConfigName, constants.ConfigExt))
+  defaultConfigFilePath := path.Join(ConfigDirPath, fmt.Sprintf("%s.%s", settings.ConfigName, settings.ConfigExt))
   // If config file doesn't exist
   if _, err := os.Stat(defaultConfigFilePath); os.IsNotExist(err) {
     // Write empty JSON file
     ioutil.WriteFile(defaultConfigFilePath, []byte("{}"), 0644)
   }
   // Bind env
-  viper.BindEnv(constants.ServerUrlKey, constants.ServerUrlEnvName)
+  viper.BindEnv(settings.ServerUrlKey, settings.ServerUrlEnvName)
 
   // Read config file
   err := viper.ReadInConfig()
@@ -70,7 +70,7 @@ func init() {
 
   const serverFlag = "server"
   RootCmd.PersistentFlags().StringVarP(&ServerUrlStr, serverFlag, "s", "", "Trans Server URL")
-  viper.BindPFlag(constants.ServerUrlKey, RootCmd.PersistentFlags().Lookup(serverFlag))
+  viper.BindPFlag(settings.ServerUrlKey, RootCmd.PersistentFlags().Lookup(serverFlag))
 }
 
 var versionCmd = &cobra.Command{
