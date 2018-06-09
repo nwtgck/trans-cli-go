@@ -5,12 +5,14 @@ import (
   "os"
   "net/url"
   "net/http"
+  "io"
   "io/ioutil"
   "strings"
 
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
-  "io"
+  "github.com/spf13/viper"
+  "github.com/nwtgck/trans-cli-go/constants"
 )
 
 // Duration of file storing
@@ -49,18 +51,14 @@ var sendCmd = &cobra.Command{
   Long:  "Send a file",
   Run: func(cmd *cobra.Command, args []string) {
 
-    // TODO: Hard code: ENV NAME
-    const TRANS_SERVER_URL_NAME = "TRANS_SERVER_URL"
-
-    // Get server URL
-    serverUrlStr, exist := os.LookupEnv(TRANS_SERVER_URL_NAME)
-
-    // If $TRANS_SERVER_URL does not exist
-    if !exist {
-      // Emit an error and exit
-      fmt.Fprintf(os.Stderr, "Error: Set $%s properly\n", TRANS_SERVER_URL_NAME)
+    // If server URL is not set
+    if !viper.IsSet(constants.ServerUrlKey) {
+      fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
       os.Exit(1)
     }
+
+    // Get server URL
+    serverUrlStr := viper.GetString(constants.ServerUrlKey)
 
     // Check validity of server URL
     serverUrl, err := url.Parse(serverUrlStr)

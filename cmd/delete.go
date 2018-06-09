@@ -6,8 +6,11 @@ import (
   "net/url"
   "net/http"
   "path"
-  "github.com/spf13/cobra"
   "io/ioutil"
+
+  "github.com/spf13/cobra"
+  "github.com/spf13/viper"
+  "github.com/nwtgck/trans-cli-go/constants"
 )
 
 
@@ -26,18 +29,14 @@ var deleteCmd = &cobra.Command{
   Run: func(cmd *cobra.Command, args []string) {
     // TODO: Extract command parts (Almost part is the same as get command)
 
-    // TODO: Hard code: ENV NAME
-    const TRANS_SERVER_URL_NAME = "TRANS_SERVER_URL"
-
-    // Get server URL
-    serverUrlStr, exist := os.LookupEnv(TRANS_SERVER_URL_NAME)
-
-    // If $TRANS_SERVER_URL does not exist
-    if !exist {
-      // Emit an error and exit
-      fmt.Fprintf(os.Stderr, "Error: Set $%s properly\n", TRANS_SERVER_URL_NAME)
+    // If server URL is not set
+    if !viper.IsSet(constants.ServerUrlKey) {
+      fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
       os.Exit(1)
     }
+
+    // Get server URL
+    serverUrlStr := viper.GetString(constants.ServerUrlKey)
 
     // Check validity of server URL
     serverUrl, err := url.Parse(serverUrlStr)

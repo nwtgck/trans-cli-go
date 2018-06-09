@@ -10,6 +10,8 @@ import (
 
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
+  "github.com/spf13/viper"
+  "github.com/nwtgck/trans-cli-go/constants"
 )
 
 
@@ -29,20 +31,16 @@ var getCmd = &cobra.Command{
   Short: "Download a file",
   Long:  "Download a file",
   Run: func(cmd *cobra.Command, args []string) {
-    // TODO: Extract command parts (Almost part is the same as send command)
+    // TODO: Extract command parts
 
-    // TODO: Hard code: ENV NAME
-    const TRANS_SERVER_URL_NAME = "TRANS_SERVER_URL"
-
-    // Get server URL
-    serverUrlStr, exist := os.LookupEnv(TRANS_SERVER_URL_NAME)
-
-    // If $TRANS_SERVER_URL does not exist
-    if !exist {
-      // Emit an error and exit
-      fmt.Fprintf(os.Stderr, "Error: Set $%s properly\n", TRANS_SERVER_URL_NAME)
+    // If server URL is not set
+    if !viper.IsSet(constants.ServerUrlKey) {
+      fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
       os.Exit(1)
     }
+
+    // Get server URL
+    serverUrlStr := viper.GetString(constants.ServerUrlKey)
 
     // Check validity of server URL
     serverUrl, err := url.Parse(serverUrlStr)
