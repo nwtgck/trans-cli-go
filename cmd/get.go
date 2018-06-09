@@ -83,16 +83,22 @@ var getCmd = &cobra.Command{
     }
 
     var reader io.Reader
+    var bar *pb.ProgressBar = nil
     if getQuiet {
       reader = resp.Body
     } else {
       // Create a bar
-      bar := pb.New64(resp.ContentLength)
+      bar = pb.New64(resp.ContentLength)
       bar.Start()
       reader = bar.NewProxyReader(resp.Body)
     }
 
     // Save the file
     io.Copy(outFile, reader)
+
+    if bar != nil {
+      // Finish progress bar
+      bar.Finish()
+    }
   },
 }
