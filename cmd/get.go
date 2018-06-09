@@ -13,11 +13,14 @@ import (
 )
 
 
+// Disable progress bar or not
+var getQuiet bool
 // Outputs a file to stdout or not
 var outputsToStdout bool
 
 func init() {
   RootCmd.AddCommand(getCmd)
+  getCmd.Flags().BoolVarP(&getQuiet, "quiet", "q", false, "disable progress bar or not")
   getCmd.Flags().BoolVar(&outputsToStdout, "stdout", false, "outputs a file to stdout")
 }
 
@@ -80,12 +83,17 @@ var getCmd = &cobra.Command{
       }
     }
 
-    // Create a bar
-    bar := pb.New64(resp.ContentLength)
-    bar.Start()
-    barReader := bar.NewProxyReader(resp.Body)
+    var reader io.Reader
+    if getQuiet {
+      reader = resp.Body
+    } else {
+      // Create a bar
+      bar := pb.New64(resp.ContentLength)
+      bar.Start()
+      reader = bar.NewProxyReader(resp.Body)
+    }
 
     // Save the file
-    io.Copy(outFile, barReader)
+    io.Copy(outFile, reader)
   },
 }

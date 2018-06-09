@@ -10,6 +10,7 @@ import (
 
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
+  "io"
 )
 
 // Duration of file storing
@@ -27,6 +28,9 @@ var deletable bool
 // Password for deletion
 var deleteKey string
 
+// Disable progress bar or not
+var sendQuiet bool
+
 func init() {
   RootCmd.AddCommand(sendCmd)
 
@@ -36,6 +40,7 @@ func init() {
   sendCmd.Flags().IntVarP(&idLength, "id-length", "l",3, "length of ID (e.g. 3, 10)")
   sendCmd.Flags().BoolVar(&deletable, "deletable", true, "whether file is deletable or not")
   sendCmd.Flags().StringVar(&deleteKey, "delete-key", "", "key for deletion")
+  sendCmd.Flags().BoolVarP(&sendQuiet, "quiet", "q", false, "disable progress bar or not")
 }
 
 var sendCmd = &cobra.Command{
@@ -96,12 +101,17 @@ var sendCmd = &cobra.Command{
       os.Exit(1)
     }
 
-    // Create bar
-    bar := pb.New64(fileInfo.Size())
-    bar.Start()
-    barReader := bar.NewProxyReader(file)
+    var reader io.Reader
+    if sendQuiet {
+      reader = file
+    } else {
+      // Create bar
+      bar := pb.New64(fileInfo.Size())
+      bar.Start()
+      reader = bar.NewProxyReader(file)
+    }
 
-    resp, err := http.Post(serverUrl.String(), "application/octet-stream", barReader)
+    resp, err := http.Post(serverUrl.String(), "application/octet-stream", reader)
     fileIdBytes, _ := ioutil.ReadAll(resp.Body)
     fileId := strings.TrimRight(string(fileIdBytes), "\n")
     fmt.Println(fileId)
