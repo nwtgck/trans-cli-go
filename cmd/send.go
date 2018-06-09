@@ -9,6 +9,7 @@ import (
   "strings"
 
   "github.com/spf13/cobra"
+  "gopkg.in/cheggaaa/pb.v2"
 )
 
 // Duration of file storing
@@ -88,7 +89,19 @@ var sendCmd = &cobra.Command{
     }
     serverUrl.RawQuery = q.Encode()
 
-    resp, err := http.Post(serverUrl.String(), "application/octet-stream", file)
+    // Get file info
+    fileInfo, err := file.Stat()
+    if err != nil {
+      fmt.Fprintf(os.Stderr, "Error: Canot get file info\n")
+      os.Exit(1)
+    }
+
+    // Create bar
+    bar := pb.New64(fileInfo.Size())
+    bar.Start()
+    barReader := bar.NewProxyReader(file)
+
+    resp, err := http.Post(serverUrl.String(), "application/octet-stream", barReader)
     fileIdBytes, _ := ioutil.ReadAll(resp.Body)
     fileId := strings.TrimRight(string(fileIdBytes), "\n")
     fmt.Println(fileId)

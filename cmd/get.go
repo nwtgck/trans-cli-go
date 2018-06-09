@@ -9,6 +9,7 @@ import (
   "io"
 
   "github.com/spf13/cobra"
+  "gopkg.in/cheggaaa/pb.v2"
 )
 
 
@@ -79,7 +80,12 @@ var getCmd = &cobra.Command{
       }
     }
 
+    // Create a bar
+    bar := pb.New64(resp.ContentLength)
+    bar.Start()
+    barReader := bar.NewProxyReader(resp.Body)
+
     // Save the file
-    io.Copy(outFile, resp.Body)
+    io.Copy(outFile, barReader)
   },
 }
