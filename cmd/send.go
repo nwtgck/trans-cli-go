@@ -14,6 +14,7 @@ import (
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
   "golang.org/x/crypto/ssh/terminal"
+  "github.com/mholt/archiver"
 )
 
 // Duration of file storing
@@ -82,24 +83,52 @@ var sendCmd = &cobra.Command{
         os.Exit(1)
       }
 
-      // Open the first file
-      file, err := os.Open(args[0])
-      defer file.Close()
-      input = file
-      if err != nil {
-        fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", args[0])
-        os.Exit(1)
-      }
+      // File or Directory path
+      fileOrDirPath := args[0]
 
-      // Get file info
-      fileInfo, err := file.Stat()
+      // Get file or dir info
+      fileInfo, err := os.Stat(fileOrDirPath)
       if err != nil {
         fmt.Fprintf(os.Stderr, "Error: Canot get file info\n")
         os.Exit(1)
       }
 
-      // Set bar total
-      barTotal = fileInfo.Size()
+      // (from: https://stackoverflow.com/a/8824952/2885946)
+      switch mode := fileInfo.Mode(); {
+      // If it's a file
+      case mode.IsRegular():
+        // Open the first file
+        file, err := os.Open(fileOrDirPath)
+        defer file.Close()
+        // Assign input as file
+        input = file
+        if err != nil {
+          fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", fileOrDirPath)
+          os.Exit(1)
+        }
+        // Set bar total
+        barTotal = fileInfo.Size()
+      // If it's a directory
+      case mode.IsDir():
+        // Create a pipe
+        pr, pw := io.Pipe()
+        go func() {
+          // Write zip to pipe writer
+          err := archiver.Zip.Write(pw, []string{fileOrDirPath})
+          if err != nil {
+            fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", fileOrDirPath)
+            os.Exit(1)
+          }
+          defer pw.Close()
+        }()
+        // Assign input as pipe input
+        input = pr
+        // Set bar total as 0
+        // (FIXME: Specify properly)
+        barTotal = 0
+      }
+
+      fmt.Println(fileInfo.Size())
     } else {
       // === Input from pipe ===
 

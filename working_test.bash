@@ -57,6 +57,9 @@ rm 10MB.file
 # Send by pipe
 FILE_ID3=`echo "hello, world via pipe!" | ./trans send`
 
+# Send a directory
+./trans send ./vendor/
+
 # Print the content
 ./trans get --stdout $FILE_ID3
 
