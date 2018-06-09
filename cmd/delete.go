@@ -43,7 +43,7 @@ var deleteCmd = &cobra.Command{
     serverUrl, err := url.Parse(serverUrlStr)
     if err != nil {
       // Exit if URL is not valid
-      fmt.Fprint(os.Stderr, "Error: Server URL '%s' is not valid\n", serverUrlStr)
+      fmt.Fprintf(os.Stderr, "Error: Server URL '%s' is not valid\n", serverUrlStr)
       os.Exit(1)
     }
 
