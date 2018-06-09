@@ -54,6 +54,12 @@ FILE_ID2=`./trans send --duration=10s --get-times=3 --id-length=32 --deletable -
 # Remove 10MB.file
 rm 10MB.file
 
+# Send by pipe
+FILE_ID3=`echo "hello, world via pipe!" | ./trans send`
+
+# Print the content
+./trans get --stdout $FILE_ID3
+
 # Clean up the container
 docker stop $TRANS_CONT_ID
 docker rm $TRANS_CONT_ID

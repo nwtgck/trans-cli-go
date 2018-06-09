@@ -13,6 +13,7 @@ import (
   "gopkg.in/cheggaaa/pb.v2"
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
+  "golang.org/x/crypto/ssh/terminal"
 )
 
 // Duration of file storing
@@ -68,19 +69,47 @@ var sendCmd = &cobra.Command{
       os.Exit(1)
     }
 
-    // Check the length of arguments
-    if len(args) != 1 {
-      fmt.Fprint(os.Stderr, "Error: Specify a file\n")
-      os.Exit(1)
+
+    // Input (file or piped stdin)
+    var input io.Reader
+    // Total number of bar
+    var barTotal int64
+    // If pipe is not used
+    if terminal.IsTerminal(0) {
+      // Check the length of arguments
+      if len(args) != 1 {
+        fmt.Fprint(os.Stderr, "Error: Specify a file\n")
+        os.Exit(1)
+      }
+
+      // Open the first file
+      file, err := os.Open(args[0])
+      defer file.Close()
+      input = file
+      if err != nil {
+        fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", args[0])
+        os.Exit(1)
+      }
+
+      // Get file info
+      fileInfo, err := file.Stat()
+      if err != nil {
+        fmt.Fprintf(os.Stderr, "Error: Canot get file info\n")
+        os.Exit(1)
+      }
+
+      // Set bar total
+      barTotal = fileInfo.Size()
+    } else {
+      // === Input from pipe ===
+
+      // Set input as stdin
+      input = os.Stdin
+      // Set bar total as 0
+      // (FIXME: Specify properly)
+      barTotal = 0
     }
 
-    // Open the first file
-    file, err := os.Open(args[0])
-    defer file.Close()
-    if err != nil {
-      fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", args[0])
-      os.Exit(1)
-    }
 
     // (from: https://qiita.com/yyoshiki41/items/a0354d9ad70c1b8225b6)
     q := serverUrl.Query()
@@ -93,21 +122,14 @@ var sendCmd = &cobra.Command{
     }
     serverUrl.RawQuery = q.Encode()
 
-    // Get file info
-    fileInfo, err := file.Stat()
-    if err != nil {
-      fmt.Fprintf(os.Stderr, "Error: Canot get file info\n")
-      os.Exit(1)
-    }
-
     var reader io.Reader
     if sendQuiet {
-      reader = file
+      reader = input
     } else {
       // Create bar
-      bar := pb.New64(fileInfo.Size())
+      bar := pb.New64(barTotal)
       bar.Start()
-      reader = bar.NewProxyReader(file)
+      reader = bar.NewProxyReader(input)
     }
 
     resp, err := http.Post(serverUrl.String(), "application/octet-stream", reader)
