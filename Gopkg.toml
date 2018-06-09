@@ -1,0 +1,15 @@
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
+
+[[constraint]]
+  name = "github.com/cheggaaa/pb"
+  version = "2.0.6"
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  version = "1.0.2"
+
+[[constraint]]
+  name = "github.com/mholt/archiver"
+  revision = "e4ef56d48eb029648b0e895bb0b6a393ef0829c3"
