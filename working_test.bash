@@ -44,6 +44,10 @@ diff 10MB.file $FILE_ID
 # Remove downloaded file
 rm $FILE_ID
 
+# Send a file with flags
+./trans send --duration=10s --get-times=3 --id-length=32 --deletable --delete-key=1234 10MB.file
+
+
 # Remove 10MB.file
 rm 10MB.file
 
