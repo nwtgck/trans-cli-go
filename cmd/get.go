@@ -69,15 +69,16 @@ var getCmd = &cobra.Command{
     fileFileName := fileId
 
     // Output file
-    var outFile io.Writer
+    var outFile io.WriteCloser
 
     // If outputs to stdout
     if outputsToStdout {
       outFile = os.Stdout
     } else {
       outFile, err = os.Create(fileFileName)
+      defer outFile.Close()
       if err != nil {
-        fmt.Fprint(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
+        fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
       }
     }
 

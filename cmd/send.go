@@ -76,6 +76,7 @@ var sendCmd = &cobra.Command{
 
     // Open the first file
     file, err := os.Open(args[0])
+    defer file.Close()
     if err != nil {
       fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", args[0])
       os.Exit(1)
@@ -110,6 +111,7 @@ var sendCmd = &cobra.Command{
     }
 
     resp, err := http.Post(serverUrl.String(), "application/octet-stream", reader)
+    defer resp.Body.Close()
     fileIdBytes, _ := ioutil.ReadAll(resp.Body)
     fileId := strings.TrimRight(string(fileIdBytes), "\n")
     fmt.Println(fileId)
