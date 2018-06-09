@@ -127,8 +127,6 @@ var sendCmd = &cobra.Command{
         // (FIXME: Specify properly)
         barTotal = 0
       }
-
-      fmt.Println(fileInfo.Size())
     } else {
       // === Input from pipe ===
 
