@@ -11,8 +11,13 @@ import (
   "github.com/spf13/cobra"
 )
 
+
+// Outputs a file to stdout or not
+var outputsToStdout bool
+
 func init() {
   RootCmd.AddCommand(getCmd)
+  getCmd.Flags().BoolVar(&outputsToStdout, "stdout", false, "outputs a file to stdout")
 }
 
 var getCmd = &cobra.Command{
@@ -60,9 +65,18 @@ var getCmd = &cobra.Command{
 
     // Create a file
     fileFileName := fileId
-    outFile, err := os.Create(fileFileName)
-    if err != nil {
-      fmt.Fprint(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
+
+    // Output file
+    var outFile io.Writer
+
+    // If outputs to stdout
+    if outputsToStdout {
+      outFile = os.Stdout
+    } else {
+      outFile, err = os.Create(fileFileName)
+      if err != nil {
+        fmt.Fprint(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
+      }
     }
 
     // Save the file
