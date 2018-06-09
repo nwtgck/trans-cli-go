@@ -34,7 +34,7 @@ func init() {
   sendCmd.Flags().IntVarP(&getTimes, "get-times",  "t", 100, "download limit (e.g. 1, 10)")
   sendCmd.Flags().IntVarP(&idLength, "id-length", "l",3, "length of ID (e.g. 3, 10)")
   sendCmd.Flags().BoolVar(&deletable, "deletable", true, "whether file is deletable or not")
-  sendCmd.Flags().StringVar(&deleteKey, "delete-key", "", "key for delete")
+  sendCmd.Flags().StringVar(&deleteKey, "delete-key", "", "key for deletion")
 }
 
 var sendCmd = &cobra.Command{

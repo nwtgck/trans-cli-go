@@ -33,19 +33,22 @@ export TRANS_SERVER_URL=http://localhost:8080
 dd if=/dev/urandom of=10MB.file bs=1024 count=10240
 
 # Send 10MB.file
-FILE_ID=`./trans send 10MB.file`
+FILE_ID1=`./trans send 10MB.file`
 
 # Get the file
-./trans get $FILE_ID
+./trans get $FILE_ID1
 
 # Diff
-diff 10MB.file $FILE_ID
+diff 10MB.file $FILE_ID1
 
 # Remove downloaded file
-rm $FILE_ID
+rm $FILE_ID1
 
 # Send a file with flags
-./trans send --duration=10s --get-times=3 --id-length=32 --deletable --delete-key=1234 10MB.file
+FILE_ID2=`./trans send --duration=10s --get-times=3 --id-length=32 --deletable --delete-key=1234 10MB.file`
+
+# Delete the file
+./trans delete --delete-key=1234 $FILE_ID2
 
 
 # Remove 10MB.file
