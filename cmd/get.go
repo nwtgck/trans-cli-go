@@ -11,6 +11,7 @@ import (
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
   "github.com/spf13/viper"
+  "github.com/Code-Hex/pget"
   "github.com/nwtgck/trans-cli-go/settings"
 )
 
@@ -19,11 +20,14 @@ import (
 var getQuiet bool
 // Outputs a file to stdout or not
 var outputsToStdout bool
+// Parallel download  or not
+var parallel bool
 
 func init() {
   RootCmd.AddCommand(getCmd)
   getCmd.Flags().BoolVarP(&getQuiet, "quiet", "q", false, "disable progress bar or not")
   getCmd.Flags().BoolVar(&outputsToStdout, "stdout", false, "outputs a file to stdout")
+  getCmd.Flags().BoolVarP(&parallel, "parallel", "p", false, "enable parallel download")
 }
 
 var getCmd = &cobra.Command{
@@ -56,49 +60,89 @@ var getCmd = &cobra.Command{
       os.Exit(1)
     }
 
+    // FIXME: Allow users to use both --quiet and --parallel
+    // If --quiet and --parallel
+    if getQuiet && parallel {
+      // Print warning message
+      fmt.Fprint(os.Stderr, "Warning: Disable '--quiet'\n")
+    }
+
+    // FIXME: Allow users to use both --stdout and --parallel
+    // If --stdout and --parallel
+    if outputsToStdout && parallel {
+      // Print warning message
+      fmt.Fprint(os.Stderr, "Warning: Disable '--stdout'\n")
+    }
+
     // Get file ID
     fileId := args[0]
 
     // Join server url with file ID
     serverUrl.Path = path.Join(serverUrl.Path, fileId)
 
-    // Download the file
-    resp, err := http.Get(serverUrl.String())
-
     // Create a file
     fileFileName := fileId
 
-    // Output file
-    var outFile io.WriteCloser
 
-    // If outputs to stdout
-    if outputsToStdout {
-      outFile = os.Stdout
-    } else {
-      outFile, err = os.Create(fileFileName)
-      defer outFile.Close()
-      if err != nil {
-        fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
+    // If parallel download is enable
+    if parallel {
+      // pget setting
+      pg := pget.New()
+      pg.URLs = []string{serverUrl.String()}
+      pg.TargetDir = ""
+      pg.Utils.SetFileName(fileFileName)
+
+
+      if err := pg.Checking(); err != nil {
+        fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+        os.Exit(1)
       }
-    }
 
-    var reader io.Reader
-    var bar *pb.ProgressBar = nil
-    if getQuiet {
-      reader = resp.Body
+      if err := pg.Download(); err != nil {
+        fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+        os.Exit(1)
+      }
+
+      if err := pg.Utils.BindwithFiles(pg.Procs); err != nil {
+        fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+        os.Exit(1)
+      }
     } else {
-      // Create a bar
-      bar = pb.New64(resp.ContentLength)
-      bar.Start()
-      reader = bar.NewProxyReader(resp.Body)
-    }
+      // Download the file
+      resp, err := http.Get(serverUrl.String())
 
-    // Save the file
-    io.Copy(outFile, reader)
+      // Output file
+      var outFile io.WriteCloser
 
-    if bar != nil {
-      // Finish progress bar
-      bar.Finish()
+      // If outputs to stdout
+      if outputsToStdout {
+        outFile = os.Stdout
+      } else {
+        outFile, err = os.Create(fileFileName)
+        defer outFile.Close()
+        if err != nil {
+          fmt.Fprintf(os.Stderr, "Error: Cannot open '%s'\n", fileFileName)
+        }
+      }
+
+      var reader io.Reader
+      var bar *pb.ProgressBar = nil
+      if getQuiet {
+        reader = resp.Body
+      } else {
+        // Create a bar
+        bar = pb.New64(resp.ContentLength)
+        bar.Start()
+        reader = bar.NewProxyReader(resp.Body)
+      }
+
+      // Save the file
+      io.Copy(outFile, reader)
+
+      if bar != nil {
+        // Finish progress bar
+        bar.Finish()
+      }
     }
   },
 }

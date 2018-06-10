@@ -44,6 +44,12 @@ diff 10MB.file $FILE_ID1
 # Remove downloaded file
 rm $FILE_ID1
 
+# Parallel download
+./trans get --parallel $FILE_ID1
+
+# Remove downloaded file
+rm $FILE_ID1
+
 # Send a file with flags
 FILE_ID2=`./trans send --duration=10s --get-times=3 --id-length=32 --deletable --delete-key=1234 10MB.file`
 
