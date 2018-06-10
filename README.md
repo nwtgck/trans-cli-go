@@ -42,10 +42,10 @@ trans get jht
 Command bellow sets Trans Server URL to <https://trans-akka.herokuapp.com>.
 
 ```bash
-trans server https://trans-akka.herokuapp.com
+trans use https://trans-akka.herokuapp.com
 ```
 
-Use `trans server --show` to print server URL.
+Use `trans config server` to print server URL.
 
 ### Delete a file
 
@@ -106,3 +106,20 @@ Flags:
 Global Flags:
   -s, --server string   Trans Server URL
 ```
+
+## Configuration
+
+
+## Server alias
+
+Here is examples to set aliases
+
+```bash
+trans config alias heroku https://trans-akka.herokuapp.com
+```
+
+```bash
+trans config alias ibm https://trans-akka.mybluemix.net
+```
+
+Then, you can set server like `trans use heroku` or `trans use ibm`.
