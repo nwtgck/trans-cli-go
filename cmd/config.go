@@ -7,16 +7,14 @@ import (
   "github.com/spf13/cobra"
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
+  "github.com/k0kubun/pp"
 )
 
 
-// Unset value or not
-//var unSet bool
 
 func init() {
   RootCmd.AddCommand(configCmd)
-  //configCmd.Flags().BoolVarP(&unSet, "unset", "u",false, "unset setting")
-  configCmd.AddCommand(configServerCmd)
+  configCmd.AddCommand(configServerCmd, configAliasCmd)
 }
 
 var configCmd = &cobra.Command{
@@ -31,10 +29,11 @@ var configCmd = &cobra.Command{
 // `config server` command
 var configServerCmd =  &cobra.Command{
   Use:   "server",
-  Short: "Configure/Show Server URL",
+  Short: "Set/Show Server URL",
   Run: func(cmd *cobra.Command, args []string) {
     if len(args) == 1 {
       // Get server URL
+      // TODO: Check validity of URL
       serverUrlStr   := args[0]
 
       // Set server URL
@@ -58,6 +57,84 @@ var configServerCmd =  &cobra.Command{
         fmt.Println(serverUrl)
       } else {
         fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
+      }
+    }
+  },
+}
+
+// Replace new alias if exist
+// Add an alias otherwise
+func updateAliases(serverAliases []map[string]string, alias map[string]string) []map[string]string {
+  result := []map[string]string{}
+  for _, a := range serverAliases {
+    if a[settings.ServerAliasesNameKey] != alias[settings.ServerAliasesNameKey] {
+      result = append(result, a)
+    }
+  }
+  return append(result, alias)
+}
+
+// Convert interface{} => []map[string]string
+// (deep casting)
+func toArrayMapStringString(a interface{}) []map[string]string {
+  result := []map[string]string{}
+  for _, e := range a.([]interface{}) {
+    e2 := e.(map[string]interface{})
+    m  := map[string]string{}
+    for k, v := range e2 {
+      m[k] = v.(string)
+    }
+    result = append(result, m)
+  }
+  return result
+}
+
+// `config alias` command
+var configAliasCmd =  &cobra.Command{
+  Use:   "alias",
+  Short: "Set/Show server alias",
+  Run: func(cmd *cobra.Command, args []string) {
+    if len(args) == 2 {
+      serverAlias := args[0]
+      serverUrl   := args[1]
+
+      // Create an alias
+      alias := map[string]string{
+        settings.ServerAliasesNameKey: serverAlias,
+        settings.ServerAliasesUrlKey: serverUrl,
+      }
+
+      var serverAliases []map[string]string
+      // If server_aliases is set
+      if viper.IsSet(settings.ServerAliasesKey) {
+        serverAliases = toArrayMapStringString(viper.Get(settings.ServerAliasesKey))
+      } else {
+        serverAliases = []map[string]string{}
+      }
+
+      // Update server aliases
+      serverAliases = updateAliases(serverAliases, alias)
+
+      // Set the aliases
+      viper.Set(settings.ServerAliasesKey, serverAliases)
+      // Save config
+      err := viper.WriteConfig()
+      if err != nil {
+        fmt.Fprintf(os.Stderr, "Error: %s\n", err.Error())
+        os.Exit(1)
+      }
+
+      // Print message
+      fmt.Printf("Set '%s' = '%s'\n", serverAlias, serverUrl)
+    } else {
+      // If server_aliases is set
+      if viper.IsSet(settings.ServerAliasesKey) {
+        // Set server aliases
+        serverAliases := toArrayMapStringString(viper.Get(settings.ServerAliasesKey))
+        // Print server aliases
+        pp.Println(serverAliases)
+      } else {
+        fmt.Println("No server aliases")
       }
     }
   },

@@ -32,6 +32,12 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/k0kubun/pp"
+  packages = ["."]
+  revision = "027a6d1765d673d337e687394dbe780dd64e2a1e"
+  version = "v2.3.0"
+
+[[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
   revision = "c2353362d570a7bfa228149c62842019201cfb71"
@@ -189,6 +195,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d3c6f68c1d6aa964a160023e1ae5adf1763255fe4091203d1adb6ada694427f2"
+  inputs-digest = "1ddf55be1be2e2312fbdac574566852cb069d0b5237d8a49c9bade76b5a94afb"
   solver-name = "gps-cdcl"
   solver-version = 1
