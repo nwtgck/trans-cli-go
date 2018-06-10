@@ -8,6 +8,7 @@ import (
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
   "github.com/k0kubun/pp"
+  "net/url"
 )
 
 
@@ -26,15 +27,44 @@ var configCmd = &cobra.Command{
   },
 }
 
+// Find server URL from aliases
+func findServerUrl(serverAliases []map[string]string, alias string) *string {
+  for _, a := range serverAliases {
+    if a[settings.ServerAliasesNameKey] == alias {
+      serverUrl := a[settings.ServerAliasesUrlKey]
+      return &serverUrl
+    }
+  }
+  return nil
+}
+
 // `config server` command
 var configServerCmd =  &cobra.Command{
   Use:   "server",
   Short: "Set/Show Server URL",
   Run: func(cmd *cobra.Command, args []string) {
     if len(args) == 1 {
-      // Get server URL
-      // TODO: Check validity of URL
-      serverUrlStr   := args[0]
+      // Get server URL or alias
+      serverUrlOrAlias   := args[0]
+
+      // Server URL
+      var serverUrlStr string
+      // If valid url
+      if _, err := url.ParseRequestURI(serverUrlOrAlias); err == nil {
+        serverUrlStr = serverUrlOrAlias
+      } else {
+        // Set server aliases
+        serverAliases := toArrayMapStringString(viper.Get(settings.ServerAliasesKey))
+
+        // If alias not found
+        if u := findServerUrl(serverAliases, serverUrlOrAlias); u == nil {
+          fmt.Fprintf(os.Stderr, "Error: Alias '%s' not found or invalid URL\n", serverUrlOrAlias)
+          os.Exit(1)
+        } else {
+          // Set server URL
+          serverUrlStr = *u
+        }
+      }
 
       // Set server URL
       viper.Set(settings.ServerUrlKey, serverUrlStr)
