@@ -3,15 +3,47 @@ package cmd
 import (
   "fmt"
   "os"
+  "net/url"
 
   "github.com/spf13/cobra"
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
   "github.com/k0kubun/pp"
-  "net/url"
 )
 
+// Set server
+func setServer(serverUrlOrAlias string ){
+  // Server URL
+  var serverUrlStr string
+  // If valid url
+  if _, err := url.ParseRequestURI(serverUrlOrAlias); err == nil {
+    serverUrlStr = serverUrlOrAlias
+  } else {
+    // Set server aliases
+    serverAliases := toArrayMapStringString(viper.Get(settings.ServerAliasesKey))
 
+    // If alias not found
+    if u := findServerUrl(serverAliases, serverUrlOrAlias); u == nil {
+      fmt.Fprintf(os.Stderr, "Error: Alias '%s' not found or invalid URL\n", serverUrlOrAlias)
+      os.Exit(1)
+    } else {
+      // Set server URL
+      serverUrlStr = *u
+    }
+  }
+
+  // Set server URL
+  viper.Set(settings.ServerUrlKey, serverUrlStr)
+  // Save config
+  err := viper.WriteConfig()
+  if err != nil {
+    fmt.Fprintf(os.Stderr, "Error: %s\n", err.Error())
+    os.Exit(1)
+  }
+
+  // Print message
+  fmt.Printf("Set '%s'\n", serverUrlStr)
+}
 
 func init() {
   RootCmd.AddCommand(configCmd)
@@ -47,38 +79,7 @@ var configServerCmd =  &cobra.Command{
       // Get server URL or alias
       serverUrlOrAlias   := args[0]
 
-      // Server URL
-      var serverUrlStr string
-      // If valid url
-      if _, err := url.ParseRequestURI(serverUrlOrAlias); err == nil {
-        serverUrlStr = serverUrlOrAlias
-      } else {
-        // Set server aliases
-        serverAliases := toArrayMapStringString(viper.Get(settings.ServerAliasesKey))
-
-        // If alias not found
-        if u := findServerUrl(serverAliases, serverUrlOrAlias); u == nil {
-          fmt.Fprintf(os.Stderr, "Error: Alias '%s' not found or invalid URL\n", serverUrlOrAlias)
-          os.Exit(1)
-        } else {
-          // Set server URL
-          serverUrlStr = *u
-        }
-      }
-
-      // Set server URL
-      viper.Set(settings.ServerUrlKey, serverUrlStr)
-      // Save config
-      err := viper.WriteConfig()
-      if err != nil {
-        fmt.Fprintf(os.Stderr, "Error: %s\n", err.Error())
-        os.Exit(1)
-      }
-
-      // Print message
-      fmt.Printf("Set '%s'\n", serverUrlStr)
-
-
+      setServer(serverUrlOrAlias)
     } else {
       // If server URL is set
       if viper.IsSet(settings.ServerUrlKey) {
