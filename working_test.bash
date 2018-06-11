@@ -1,13 +1,5 @@
 #! /bin/bash -x
 
-if [ "$TRAVIS" = "true" ]; then
-  # == Move build directory ==
-  cd /
-  mkdir $GOPATH/src
-  mv $TRAVIS_BUILD_DIR $GOPATH/src/trans-cli-go
-  cd $GOPATH/src/trans-cli-go
-fi
-
 # Working test
 
 

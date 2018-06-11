@@ -8,13 +8,12 @@ services:
 
 before_install:
   # Install dep
-  # (from: https://github.com/travis-ci/travis-ci/issues/8301#issuecomment-384963911)
-  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  # (from: https://github.com/sue445/zatsu_monitor/blob/c265f1b9301c056cbac5006952270812c9155266/.travis.yml)
+  - go get github.com/golang/dep/...
 
-# (from: https://gist.github.com/y0ssar1an/df2dab474520c4086926f672c52db139)
-# Skip the install step. Don't `go get` dependencies. Only build with the code
-# in vendor/
-install: true
+# (from: https://github.com/sue445/zatsu_monitor/blob/c265f1b9301c056cbac5006952270812c9155266/.travis.yml)
+install:
+  - $GOPATH/bin/dep ensure
 
 script:
   # Just working-test
