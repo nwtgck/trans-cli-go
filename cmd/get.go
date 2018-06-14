@@ -3,16 +3,15 @@ package cmd
 import (
   "fmt"
   "os"
-  "net/url"
   "net/http"
   "path"
   "io"
 
   "github.com/spf13/cobra"
   "gopkg.in/cheggaaa/pb.v2"
-  "github.com/spf13/viper"
   "github.com/Code-Hex/pget"
-  "github.com/nwtgck/trans-cli-go/settings"
+  "github.com/nwtgck/trans-cli-go/util"
+  "net/url"
 )
 
 
@@ -35,23 +34,19 @@ var getCmd = &cobra.Command{
   Short: "Download a file",
   Long:  "Download a file",
   Run: func(cmd *cobra.Command, args []string) {
-    // TODO: Extract command parts
-
-    // If server URL is not set
-    if !viper.IsSet(settings.ServerUrlKey) {
-      fmt.Fprint(os.Stderr, "Error: Server URL is not found\n")
-      os.Exit(1)
-    }
-
-    // Get server URL
-    serverUrlStr := viper.GetString(settings.ServerUrlKey)
 
     // Check validity of server URL
-    serverUrl, err := url.Parse(serverUrlStr)
+    serverUrlStr, err := util.GetUrlAndValidate()
     if err != nil {
       // Exit if URL is not valid
       fmt.Fprintf(os.Stderr, "Error: Server URL '%s' is not valid\n", serverUrlStr)
       os.Exit(1)
+    }
+    // Convert URL string to server URL
+    serverUrl, err := url.Parse(serverUrlStr)
+    if err != nil {
+      // NOTE: This will never happen because of the validation
+      panic(err)
     }
 
     // Check the length of arguments

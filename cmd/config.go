@@ -3,12 +3,11 @@ package cmd
 import (
   "fmt"
   "os"
-  "net/url"
-
   "github.com/spf13/cobra"
   "github.com/spf13/viper"
   "github.com/nwtgck/trans-cli-go/settings"
   "github.com/k0kubun/pp"
+  "github.com/asaskevich/govalidator"
 )
 
 // Set server
@@ -16,7 +15,7 @@ func setServer(serverUrlOrAlias string ){
   // Server URL
   var serverUrlStr string
   // If valid url
-  if _, err := url.ParseRequestURI(serverUrlOrAlias); err == nil {
+  if govalidator.IsURL(serverUrlStr) {
     serverUrlStr = serverUrlOrAlias
   } else {
     // Set server aliases
@@ -128,6 +127,11 @@ var configAliasCmd =  &cobra.Command{
     if len(args) == 2 {
       serverAlias := args[0]
       serverUrl   := args[1]
+
+      if !govalidator.IsRequestURL(serverUrl) {
+        fmt.Fprintf(os.Stderr, "Error: '%s' is not valid URL\n", serverUrl)
+        os.Exit(1)
+      }
 
       // Create an alias
       alias := map[string]string{
