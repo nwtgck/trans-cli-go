@@ -1,13 +1,5 @@
 #! /bin/bash -x
 
-if [ "$TRAVIS" = "true" ]; then
-  # == Move build directory ==
-  cd /
-  mkdir $GOPATH/src
-  mv $TRAVIS_BUILD_DIR $GOPATH/src/trans-cli-go
-  cd $GOPATH/src/trans-cli-go
-fi
-
 # Working test
 
 
@@ -40,6 +32,12 @@ FILE_ID1=`./trans send 10MB.file`
 
 # Diff
 diff 10MB.file $FILE_ID1
+
+# Remove downloaded file
+rm $FILE_ID1
+
+# Parallel download
+./trans get --parallel $FILE_ID1
 
 # Remove downloaded file
 rm $FILE_ID1

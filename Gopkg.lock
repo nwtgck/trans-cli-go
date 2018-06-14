@@ -2,6 +2,30 @@
 
 
 [[projects]]
+  name = "github.com/Code-Hex/pget"
+  packages = ["."]
+  revision = "7bace10b201ad40c4d9a37f0155d479f369bb918"
+  version = "0.0.6"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/Code-Hex/updater"
+  packages = ["."]
+  revision = "c3f2786725200723369a8f97b8b24bb19fe3baf4"
+
+[[projects]]
+  name = "github.com/antonholmquist/jason"
+  packages = ["."]
+  revision = "c23cef7eaa75a6a5b8810120e167bd590d8fd2ab"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/asaskevich/govalidator"
+  packages = ["."]
+  revision = "ccb8e960c48f04d6935e72476ae4a51028f9e22f"
+  version = "v9"
+
+[[projects]]
   branch = "master"
   name = "github.com/dsnet/compress"
   packages = [".","bzip2","bzip2/internal/sais","internal","internal/errors","internal/prefix"]
@@ -32,6 +56,12 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/jessevdk/go-flags"
+  packages = ["."]
+  revision = "c6ca198ec95c841fdb89fc0de7496fed11ab854e"
+  version = "v1.4.0"
+
+[[projects]]
   name = "github.com/k0kubun/pp"
   packages = ["."]
   revision = "027a6d1765d673d337e687394dbe780dd64e2a1e"
@@ -54,6 +84,18 @@
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/mattn/go-runewidth"
+  packages = ["."]
+  revision = "9e777a8366cce605130a531d2cd6363d07ad7317"
+  version = "v0.0.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mcuadros/go-version"
+  packages = ["."]
+  revision = "88e56e02bea1c203c99222c365fa52a69996ccac"
 
 [[projects]]
   name = "github.com/mholt/archiver"
@@ -89,6 +131,18 @@
   packages = ["xxHash32"]
   revision = "f051bb7f1d1aaf1b5a665d74fb6b0217712c69f7"
   version = "v0.1.1"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/ricochet2200/go-disk-usage"
+  packages = ["du"]
+  revision = "f0d1b743428fc09792f93233d9412f89f88fa2ab"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -140,6 +194,18 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context","context/ctxhttp"]
+  revision = "1e491301e022f8f977054da4c2d852decd59571f"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sync"
+  packages = ["errgroup"]
+  revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
   revision = "9527bec2660bd847c050fda93a0f0c6dee0800bb"
@@ -155,6 +221,12 @@
   packages = ["."]
   revision = "b24eb346a94c3ba12c1da1e564dbac1b498a77ce"
   version = "v1.1.1"
+
+[[projects]]
+  name = "gopkg.in/cheggaaa/pb.v1"
+  packages = ["."]
+  revision = "2af8bbdea9e99e83b3ac400d8f6b6d1b8cbbf338"
+  version = "v1.0.25"
 
 [[projects]]
   name = "gopkg.in/cheggaaa/pb.v2"
@@ -195,6 +267,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "54cc900364fe8f6c9eb8f21e16f8e4a0cbc6e9cb5c2559a169a1bd8885c313c6"
+  inputs-digest = "72ac1f9558235350c2d3738cbe5740c40108012a04a1c21abe512528b2f67ccc"
   solver-name = "gps-cdcl"
   solver-version = 1

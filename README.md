@@ -53,6 +53,15 @@ Use `trans config server` to print server URL.
 trans delete jht
 ```
 
+### Parallel Download
+
+Use `-p` or `--parallel` for parallel download.
+
+
+```bash
+trans get -p jht
+```
+
 ### Safe Sending with Long ID
 
 Use `-l` or `--id-length` to specify File ID length.
