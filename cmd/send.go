@@ -31,6 +31,9 @@ var deletable bool
 // Password for deletion
 var deleteKey string
 
+// Whether secure character is used for File ID
+var usesSecureChar bool
+
 // Disable progress bar or not
 var sendQuiet bool
 
@@ -43,6 +46,7 @@ func init() {
   sendCmd.Flags().IntVarP(&idLength, "id-length", "l",3, "length of ID (e.g. 3, 10)")
   sendCmd.Flags().BoolVar(&deletable, "deletable", true, "whether file is deletable or not")
   sendCmd.Flags().StringVar(&deleteKey, "delete-key", "", "key for deletion")
+  sendCmd.Flags().BoolVar(&usesSecureChar, "secure-char", false, "uses more complex characters for File ID")
   sendCmd.Flags().BoolVarP(&sendQuiet, "quiet", "q", false, "disable progress bar or not")
 }
 
@@ -140,6 +144,7 @@ var sendCmd = &cobra.Command{
     q.Set("get-times", fmt.Sprintf("%d", getTimes))
     q.Set("id-length", fmt.Sprintf("%d", idLength))
     q.Set("deletable", fmt.Sprintf("%t", deletable))
+    q.Set("secure-char", fmt.Sprintf("%t", usesSecureChar))
     if deleteKey != "" {
       q.Set("delete-key", deleteKey)
     }
