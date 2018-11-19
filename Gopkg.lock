@@ -148,12 +148,12 @@
   revision = "88e56e02bea1c203c99222c365fa52a69996ccac"
 
 [[projects]]
-  digest = "1:8b83fa0c7292b37d094073956c6cfaa02bdb42a2dcfad195013392120215e2cb"
+  digest = "1:e868e97fbf477bdb0782e762fe08b988284a2daea00368552744c83e94223e3a"
   name = "github.com/mholt/archiver"
   packages = ["."]
   pruneopts = ""
-  revision = "298df7b5f54d0940dc376a7581ce9c47ecbb07b2"
-  version = "v3.0.1"
+  revision = "e1ccfb528128bf4ff3bd906823ae2dcb708f79f5"
+  version = "v3.1.0"
 
 [[projects]]
   branch = "master"
