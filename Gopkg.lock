@@ -18,6 +18,14 @@
   revision = "c3f2786725200723369a8f97b8b24bb19fe3baf4"
 
 [[projects]]
+  branch = "master"
+  digest = "1:6f13d717bd70b0afdb016ebd13423cdff4c770e0d73fb618b9e188be65ef98ed"
+  name = "github.com/andybalholm/brotli"
+  packages = ["."]
+  pruneopts = ""
+  revision = "5f990b63d2d66498f0a651a1b3ed35dec0b3a054"
+
+[[projects]]
   digest = "1:ff608df68db2ac2073920ca26611e614d028c83ef3587c20fb773a5d669a554d"
   name = "github.com/antonholmquist/jason"
   packages = ["."]
@@ -55,6 +63,17 @@
   pruneopts = ""
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
+
+[[projects]]
+  branch = "master"
+  digest = "1:158b29fe6a378ed096d48927038f7ad6c84ef28bd07a388b0688e91aa53feba2"
+  name = "github.com/golang/gddo"
+  packages = [
+    "httputil",
+    "httputil/header",
+  ]
+  pruneopts = ""
+  revision = "af0f2af80721261f4d211b2c9563f7b46b2aab06"
 
 [[projects]]
   branch = "master"
@@ -108,6 +127,37 @@
   version = "v2.3.0"
 
 [[projects]]
+  digest = "1:b295266acc20731c453567afd744cfc4d2377c98e58b3c81f206bcb348324cf3"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "flate",
+    "fse",
+    "huff0",
+    "snappy",
+    "zstd",
+    "zstd/internal/xxhash",
+  ]
+  pruneopts = ""
+  revision = "7a873649b01a9669308e8d58b6bcbbccc0b06b5d"
+  version = "v1.7.1"
+
+[[projects]]
+  digest = "1:cb39bebc72505b4120988fb9e258ecffba4ed679dc04794d517198887160df80"
+  name = "github.com/klauspost/cpuid"
+  packages = ["."]
+  pruneopts = ""
+  revision = "05a8198c0f5a27739aec358908d7e12c64ce6eb7"
+  version = "v1.2.1"
+
+[[projects]]
+  digest = "1:0a36eb96ea34a66384e17bf1927f42ffa5856ffcae35561ff7936f968c43776a"
+  name = "github.com/klauspost/pgzip"
+  packages = ["."]
+  pruneopts = ""
+  revision = "083b1c3f84dd6486588802e5ce295de3a7f41a8b"
+  version = "v1.2.1"
+
+[[projects]]
   digest = "1:961dc3b1d11f969370533390fdf203813162980c858e1dabe827b60940c909a5"
   name = "github.com/magiconair/properties"
   packages = ["."]
@@ -148,12 +198,12 @@
   revision = "88e56e02bea1c203c99222c365fa52a69996ccac"
 
 [[projects]]
-  digest = "1:8b83fa0c7292b37d094073956c6cfaa02bdb42a2dcfad195013392120215e2cb"
+  digest = "1:0f269f9377ca472b4c88ccfe38c67a6088aca9ef6e8a508e4a0d8b6bccada51a"
   name = "github.com/mholt/archiver"
   packages = ["."]
   pruneopts = ""
-  revision = "298df7b5f54d0940dc376a7581ce9c47ecbb07b2"
-  version = "v3.0.1"
+  revision = "33320f6f730664f9896b05b777e53ae4c917f572"
+  version = "v3.2.0"
 
 [[projects]]
   branch = "master"
