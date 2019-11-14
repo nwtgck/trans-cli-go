@@ -18,6 +18,14 @@
   revision = "c3f2786725200723369a8f97b8b24bb19fe3baf4"
 
 [[projects]]
+  digest = "1:67363874cb9ef800804cbd9cdd853953c3826ae1511011cd3467ab331ca3c63d"
+  name = "github.com/andybalholm/brotli"
+  packages = ["."]
+  pruneopts = ""
+  revision = "b60f0d972eeb79a5fba5fb60f1e0568bc8c97e42"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:ff608df68db2ac2073920ca26611e614d028c83ef3587c20fb773a5d669a554d"
   name = "github.com/antonholmquist/jason"
   packages = ["."]
@@ -108,6 +116,29 @@
   version = "v2.3.0"
 
 [[projects]]
+  digest = "1:4ceab6231efd01210f2b8b6ab360d480d49c0f44df63841ca0465920a387495d"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "flate",
+    "fse",
+    "huff0",
+    "snappy",
+    "zstd",
+    "zstd/internal/xxhash",
+  ]
+  pruneopts = ""
+  revision = "4e96aec082898e4dad17d8aca1a7e2d01362ff6c"
+  version = "v1.9.2"
+
+[[projects]]
+  digest = "1:0a36eb96ea34a66384e17bf1927f42ffa5856ffcae35561ff7936f968c43776a"
+  name = "github.com/klauspost/pgzip"
+  packages = ["."]
+  pruneopts = ""
+  revision = "083b1c3f84dd6486588802e5ce295de3a7f41a8b"
+  version = "v1.2.1"
+
+[[projects]]
   digest = "1:961dc3b1d11f969370533390fdf203813162980c858e1dabe827b60940c909a5"
   name = "github.com/magiconair/properties"
   packages = ["."]
@@ -148,12 +179,12 @@
   revision = "88e56e02bea1c203c99222c365fa52a69996ccac"
 
 [[projects]]
-  digest = "1:8b83fa0c7292b37d094073956c6cfaa02bdb42a2dcfad195013392120215e2cb"
+  digest = "1:d0612e2ce73b9236d3986923e0d474f276d8c57183047752c48894750e7be125"
   name = "github.com/mholt/archiver"
   packages = ["."]
   pruneopts = ""
-  revision = "298df7b5f54d0940dc376a7581ce9c47ecbb07b2"
-  version = "v3.0.1"
+  revision = "3bd45bda8a6db94a901d9f39983d3b2298438e43"
+  version = "v3.3.0"
 
 [[projects]]
   branch = "master"
