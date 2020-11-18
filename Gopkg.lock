@@ -100,12 +100,12 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:01228049049d301adb9fe2a35683db8ec9d20419aac36b5cc48e92c5d05444c3"
+  digest = "1:5942309b26b6dc1c9fa1dc1797dfd4f84f6e4890d4bea28c1af93a94c2c7c977"
   name = "github.com/k0kubun/pp"
   packages = ["."]
   pruneopts = ""
-  revision = "027a6d1765d673d337e687394dbe780dd64e2a1e"
-  version = "v2.3.0"
+  revision = "f5ef2002b2a5e0c7032a2848a6c0a8b0dcf8b310"
+  version = "v3.0.7"
 
 [[projects]]
   digest = "1:961dc3b1d11f969370533390fdf203813162980c858e1dabe827b60940c909a5"

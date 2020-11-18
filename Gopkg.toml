@@ -16,7 +16,7 @@
 
 [[constraint]]
   name = "github.com/k0kubun/pp"
-  version = "2.3.0"
+  version = "3.0.7"
 
 [[constraint]]
   name = "github.com/Code-Hex/pget"
